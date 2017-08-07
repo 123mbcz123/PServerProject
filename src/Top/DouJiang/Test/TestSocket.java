@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -13,14 +15,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class TestSocket  extends Thread{
     public static void main(String[] args){
-        for(int i=0;i<10000;i++){
-            new TestSocket().start();
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        new TestSocket().start();
         System.out.println("启动完成");
     }
     public void run(){
@@ -31,6 +26,10 @@ public class TestSocket  extends Thread{
             dos=new DataOutputStream(s.getOutputStream());
             new RecvThread(s).start();
             for(;;) {
+                Map<String,String> CmdMap=new HashMap<>();
+                CmdMap.put("Cmd","Auth");
+                CmdMap.put("User","QAQ1");
+                CmdMap.put("Pass","");
                 dos.writeUTF("Test,Test");
                 dos.flush();
                 try {

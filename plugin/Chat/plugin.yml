@@ -1,4 +1,4 @@
 --- !Top.DouJiang.plugin.Plugin
 MainClass: QAQ.Main
 PluginName: Chat
-Verision: "0.01"
+Version: "0.01"

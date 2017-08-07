@@ -16,14 +16,15 @@ public class ConsoleThread extends Thread {
             str=null;
             str=sc.nextLine();
             if(str==null){
-                SystemTools.Print("错误的指令输入/help查看全部指令!",2,0);
+                SystemTools.Print("错误的指令输入help查看全部指令!",2,0);
                 continue;
             }
             String[] strs=str.split("\\ ");
-            switch (strs[0]){
-                case "/help":
-                    break;
+            if(strs==null){
+                SystemTools.Print("错误的指令输入help查看全部指令!",2,0);
+                continue;
             }
+
         }
     }
 }
