@@ -44,11 +44,9 @@ public class Sockets implements Runnable {
 
     @Override
     public void run() {
-        StaticMap.Sockets_Set.add(this);
         CallEventClass ce = new CallEventClass();
         try {
             SystemTools.Print("客户IP:" + s.getInetAddress().getHostAddress() + "加入惹连接!", 1, 1);
-            //s.setKeepAlive(true);
             dis = new DataInputStream(s.getInputStream());
             dos = new DataOutputStream(s.getOutputStream());
             while (ConfigResult.isRunning) { //连续获取数据
@@ -71,54 +69,18 @@ public class Sockets implements Runnable {
                      */
                     switch (Cmd) {
                         case "Auth":
-                            String User = SocketTools.Base64Decrypt(MsgMap.get("User"));
-                            String Pass = SocketTools.Base64Decrypt(MsgMap.get("Pass"));
-                            if (User == null || Pass == null) {
-                                //输出
-                                continue;
-                            }
-                            ConnectionPool.PooledConnection pool = StaticMap.pool;
-                            PreparedStatement ps = null;
-                            ResultSet rs = null;
-                            if (SocketTools.isNumeric(User)) {
-                                try {
-                                    ps = pool.getPrepareStatement("select * from user where id=?;");
-                                    ps.setString(1, User);
-                                    rs = ps.executeQuery();
-                                } catch (SQLException e) {
-                                    //
-                                }
-                            } else {
-                                try {
-                                    ps = pool.getPrepareStatement("select * from user where user=?;");
-                                    ps.setString(1, User);
-                                    rs = ps.executeQuery();
-                                } catch (SQLException e) {
-                                    //
-                                }
-                            }
-                            try {
-                                if (rs.next()) {
-                                    String pass2 = rs.getString("pass");
-                                    String salt = rs.getString("salt");
-                                    if (pass2 == null || salt == null) {
-                                        continue;
-                                        //
-                                    }
-                                    Pass = SocketTools.StringToMD5(SocketTools.StringToMD5(Pass) + salt);
-                                    if (pass2.equalsIgnoreCase(Pass)) {
-                                        isAuth = true;
-                                        //成功登入
-                                        Id=rs.getString("id");
-                                    }
-                                }
-                            } catch (SQLException e) {
-                                //
+                            //System.out.println("MsgMap="+MsgMap);
+                            //String User = SocketTools.Base64Decrypt(MsgMap.get("User"));
+                            AuthPlugin ap=new AuthPlugin();
+                            AuthClass ac=ap.isAuth(MsgMap);
+                            isAuth=ac.isAuth();
+                            if(ac.isAuth()) {
+                                Id = ac.getId();
                             }
                             break;
                         case "Chat":
                             if(!isAuth){
-                                ///返回没有登入
+                                SystemTools.Print("IP: "+s.getInetAddress().getHostAddress()+" Id: "+Id+" 尝试不登入发送信息!",2,1);
                                 continue;
                             }
                             String ToId=MsgMap.get("ToId");
@@ -129,7 +91,7 @@ public class Sockets implements Runnable {
                             }else if(MsgMap.get("Type").equalsIgnoreCase("2")){
                                 Type=2;
                             }
-                            if(ToId==null||SendMsg==null||(Type!=1&&Type!=2)){
+                            if(ToId==null||(Type!=1&&Type!=2)){
                                 continue;
                             }
                             TaskClass tc=new TaskClass(Id,ToId,Type,SendMsg);

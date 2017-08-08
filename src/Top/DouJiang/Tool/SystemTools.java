@@ -164,7 +164,6 @@ public class SystemTools {
             }
         }
         Chat_List.removeAll(Remove_List);
-        System.out.println("ChatList="+Chat_List);
         Remove_List.clear();
         for (int m = 0; m < i4; m++) {
             for (int n = 0; n < Chat_List.size(); n++) {
@@ -175,15 +174,21 @@ public class SystemTools {
                     MaxPlugin = pl2;
                 }
             }
-            StaticMap.AddChatEvent(MaxPlugin);
-            Chat_List.remove(MaxPlugin);
+            if(MaxPlugin!=null) {
+                StaticMap.AddChatEvent(MaxPlugin);
+                Chat_List.remove(MaxPlugin);
+            }
             MaxInt = 0;
             MaxPlugin = null;
         }
         StringBuilder sb2 = new StringBuilder();
-        for (Plugin p3 : StaticMap.getChatEvent_List()) {
-            sb2.append(p3.PluginName);
-            sb2.append(" > ");
+        if(!StaticMap.getChatEvent_List().isEmpty()) {
+            System.out.println(StaticMap.getChatEvent_List());
+            System.out.println(StaticMap.getChatEvent_List().isEmpty());
+            for (Plugin p3 : StaticMap.getChatEvent_List()) {
+                sb2.append(p3.PluginName);
+                sb2.append(" > ");
+            }
         }
         Print("[Chat]排序结果[从大到小]: " + sb2.toString(), 1, 0);
         Print("正在对插件[Command]进行排序............", 1, 0);
@@ -205,17 +210,22 @@ public class SystemTools {
                     MaxPlugin = pl2;
                 }
             }
-            StaticMap.AddCommandEvent(MaxPlugin);
-            Chat_List.remove(MaxPlugin);
+            if(MaxPlugin!=null) {
+                StaticMap.AddCommandEvent(MaxPlugin);
+                Chat_List.remove(MaxPlugin);
+            }
             MaxInt = 0;
             MaxPlugin = null;
         }
-        StringBuilder sb3 = new StringBuilder();
-        for (Plugin p3 : StaticMap.getCommandEvent_List()) {
-            sb3.append(p3.PluginName);
-            sb3.append(" > ");
+            StringBuilder sb3 = new StringBuilder();
+        if(!StaticMap.getCommandEvent_List().isEmpty()) {
+            for (Plugin p3 : StaticMap.getCommandEvent_List()) {
+                sb3.append(p3.PluginName);
+                sb3.append(" > ");
+            }
         }
-        Print("[Command]排序结果[从大到小]: " + sb3.toString(), 1, 0);
+            Print("[Command]排序结果[从大到小]: " + sb3.toString(), 1, 0);
+
         Print("对插件排序进行完成............", 1, 0);
     }
 /*

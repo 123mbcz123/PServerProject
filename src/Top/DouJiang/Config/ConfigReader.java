@@ -17,6 +17,14 @@ public class ConfigReader {
         if(!f.exists()){
             Config c=new Config();
             c.PrintLevel=0;
+            c.isUseZip=false;
+            c.TrueUseZipOrFalseUseGzip=true;
+            c.Mysqls_DB="test";
+            c.Mysqls_Pass="pass";
+            c.Mysqls_host="127.0.0.1";
+            c.Mysqls_User="root";
+            c.ServerPort=2333;
+            c.Mysqls_Port=3306;
             try {
                 Yaml.dump(c,f);
                 SystemTools.Print("首次初始化,请设置配置文件,服务器关闭中...",1,0);
@@ -33,6 +41,14 @@ public class ConfigReader {
                 SystemTools.Print("读取Config.yml失败,服务器关闭!",2,0);
                 SystemTools.Close();
             }
+            ConfigResult.Mysqls_host=c.Mysqls_host;
+            ConfigResult.Mysqls_Port=c.Mysqls_Port;;
+            ConfigResult.Mysqls_DB=c.Mysqls_DB;
+            ConfigResult.Mysqls_User=c.Mysqls_User;
+            ConfigResult.Mysqls_Pass=c.Mysqls_Pass;
+            ConfigResult.TrueUseZipOrFalseUseGzip=c.TrueUseZipOrFalseUseGzip;
+            ConfigResult.isUseZip=c.isUseZip;
+            ConfigResult.ServerPort=c.ServerPort;
             ConfigResult.PrintLevel=c.PrintLevel;
         } catch (FileNotFoundException e) {
             SystemTools.Print("Config.yml不存在,服务器关闭!",2,0);

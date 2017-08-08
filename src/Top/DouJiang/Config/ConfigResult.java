@@ -6,12 +6,14 @@ package Top.DouJiang.Config;
 public class ConfigResult {
     public static int PrintLevel=0;
     public static boolean isRunning=false;
-    public static int ServerPort=2333;
-    public static String Mysqls_host="127.0.0.1";
-    public static String Mysqls_DB="test4";
-    public static String Mysqls_User="root";
-    public static String Mysqls_Pass="diantong";
-    public static int Mysqls_Port=3306;
+    public static int ServerPort=-1;
+    public static String Mysqls_host=null;
+    public static String Mysqls_DB=null;
+    public static String Mysqls_User=null;
+    public static String Mysqls_Pass=null;
+    public static int Mysqls_Port=-1;
+    public static boolean TrueUseZipOrFalseUseGzip=false;
+    public static boolean isUseZip=false;
     /*
     0 最低
     1 最高

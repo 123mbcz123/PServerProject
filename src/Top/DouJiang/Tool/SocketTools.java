@@ -39,6 +39,9 @@ public class SocketTools {
     /*
     加密Base64
      */
+    public static String MD5PassWord(String pass,String salt){
+        return StringToMD5(StringToMD5(pass)+salt);
+    }
     public static String Base64Encryption(String str){
         byte[] encodeBytes = Base64.encodeBase64(str.getBytes());
         return new String(encodeBytes);

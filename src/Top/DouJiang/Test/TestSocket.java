@@ -1,5 +1,8 @@
 package Top.DouJiang.Test;
 
+import Top.DouJiang.Tool.SocketTools;
+import com.sun.istack.internal.NotNull;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,9 +17,11 @@ import java.util.zip.GZIPOutputStream;
  * Created by NicoNicoNi on 2017/8/4 0004.
  */
 public class TestSocket  extends Thread{
-    public static void main(String[] args){
-        new TestSocket().start();
-        System.out.println("启动完成");
+    private String user=null;
+    private String pass=null;
+    public TestSocket(String user,String pass){
+        this.user=user;
+        this.pass=pass;
     }
     public void run(){
         DataOutputStream dos=null;
@@ -24,22 +29,15 @@ public class TestSocket  extends Thread{
             Socket s=new Socket("127.0.0.1",2333);
             //s.setKeepAlive(true);
             dos=new DataOutputStream(s.getOutputStream());
-            new RecvThread(s).start();
-            for(;;) {
+            //new RecvThread(s).start();
                 Map<String,String> CmdMap=new HashMap<>();
                 CmdMap.put("Cmd","Auth");
-                CmdMap.put("User","QAQ1");
-                CmdMap.put("Pass","");
-                dos.writeUTF("Test,Test");
+                CmdMap.put("User",user);
+                CmdMap.put("Pass",SocketTools.Base64Encryption(pass));
+                dos.writeUTF("["+SocketTools.MapToJson(CmdMap)+"]");
                 dos.flush();
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-           }
         } catch (IOException e) {
-            e.printStackTrace();
+           //
         }
     }
     public static class RecvThread extends Thread{
@@ -55,7 +53,7 @@ public class TestSocket  extends Thread{
                     dis.readUTF();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                //
             }
         }
     }

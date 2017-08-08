@@ -1,2 +1,10 @@
 --- !Top.DouJiang.Config.Config
+Mysqls_DB: test4
+Mysqls_Pass: diantong
+Mysqls_Port: 3306
+Mysqls_User: root
+Mysqls_host: 127.0.0.1
 PrintLevel: 0
+ServerPort: 2333
+TrueUseZipOrFalseUseGzip: true
+isUseZip: false

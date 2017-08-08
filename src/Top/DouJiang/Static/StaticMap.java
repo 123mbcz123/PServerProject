@@ -40,4 +40,5 @@ public class StaticMap {
     public static ConnectionPool.PooledConnection pool=null;
     public static RedisUtil ru=null;
     public static Set<Sockets> Sockets_Set=new HashSet<>();
+    public static int n=0;
 }
