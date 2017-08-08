@@ -49,6 +49,7 @@ public class Sockets implements Runnable {
             SystemTools.Print("客户IP:" + s.getInetAddress().getHostAddress() + "加入惹连接!", 1, 1);
             dis = new DataInputStream(s.getInputStream());
             dos = new DataOutputStream(s.getOutputStream());
+            StaticMap.n++;
             while (ConfigResult.isRunning) { //连续获取数据
                 String ReadStr = dis.readUTF();
                 List<String> Msg_List=SocketTools.TurnToList(ReadStr); //防止包粘连

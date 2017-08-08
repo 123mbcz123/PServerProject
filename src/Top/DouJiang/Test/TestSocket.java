@@ -25,8 +25,9 @@ public class TestSocket  extends Thread{
     }
     public void run(){
         DataOutputStream dos=null;
+        TestThread.all++;
         try {
-            Socket s=new Socket("127.0.0.1",2333);
+            Socket s=new Socket("192.168.8.130",2333);
             //s.setKeepAlive(true);
             dos=new DataOutputStream(s.getOutputStream());
             //new RecvThread(s).start();
@@ -37,7 +38,7 @@ public class TestSocket  extends Thread{
                 dos.writeUTF("["+SocketTools.MapToJson(CmdMap)+"]");
                 dos.flush();
         } catch (IOException e) {
-           //
+           TestThread.fail++;
         }
     }
     public static class RecvThread extends Thread{

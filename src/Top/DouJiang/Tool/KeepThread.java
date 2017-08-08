@@ -11,7 +11,7 @@ public class KeepThread extends Thread {
     public void run(){
         while(ConfigResult.isRunning){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
 
             }

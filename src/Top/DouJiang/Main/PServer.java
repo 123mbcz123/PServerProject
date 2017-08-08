@@ -1,5 +1,6 @@
 package Top.DouJiang.Main;
 
+import Top.DouJiang.Tool.KeepThread;
 import Top.DouJiang.Tool.SystemTools;
 
 
@@ -9,7 +10,7 @@ import Top.DouJiang.Tool.SystemTools;
 public class PServer {
     public static void main(String[] args) {
         SystemTools.Initialize();
-
+        new KeepThread().start();
         /*
         long startTime=System.nanoTime();   //获取开始时间
         long endTime=System.nanoTime(); //获取结束时间

@@ -53,7 +53,7 @@ public class AuthPlugin {
                     ac.setId(rs.getString("id"));
                     ac.setAuth(true);
                     SystemTools.Print("Id: "+ac.getId()+" 登入成功!",1,1);
-                    StaticMap.n++;
+                   // StaticMap.n++;
                     //成功登入
                 }
             }

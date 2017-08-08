@@ -9,10 +9,14 @@ import java.util.concurrent.Executors;
 public class TestMain {
     public static void main(String[] args){
         ExecutorService es= Executors.newCachedThreadPool();
-        for(int i=0;i<100000;i++) {
+        new TestThread().start();
+        for(int i=0;i<10000;i++) {
             es.execute(new TestSocket(String.valueOf(i),"753159"+i));
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                //
+            }
         }
-        System.out.println("执行完毕");
-
     }
 }
