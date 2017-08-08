@@ -131,8 +131,6 @@ public class SystemTools {
         List<Plugin> Main_List=new ArrayList<>();
         Main_List.addAll(Plugin_List);
         Print("正在对插件[Main]进行排序............", 1, 0);
-        System.out.println("PluginList"+Plugin_List);
-        System.out.println("MainList"+Main_List);
         int MaxInt = 0;
         Plugin MaxPlugin = null;
         int i4 = Main_List.size();

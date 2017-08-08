@@ -19,6 +19,8 @@ public class ConfigReader {
             c.PrintLevel=0;
             try {
                 Yaml.dump(c,f);
+                SystemTools.Print("首次初始化,请设置配置文件,服务器关闭中...",1,0);
+                System.exit(0);//强制关闭
             } catch (IOException e) {
                 SystemTools.Print("创建Config.yml失败,服务器关闭!",2,0);
                 SystemTools.Close();
