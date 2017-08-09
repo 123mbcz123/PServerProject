@@ -13,6 +13,7 @@ public interface PluginMain {
      * 启动时加载
      */
     void onEnable();
+
     /*
     结束时加载
      */

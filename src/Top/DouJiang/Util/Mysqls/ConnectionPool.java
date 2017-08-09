@@ -1,14 +1,12 @@
 package Top.DouJiang.Util.Mysqls;
 
+import java.sql.*;
+import java.util.Enumeration;
 import java.util.Vector;
 
 /**
  * Created by NicoNicoNi on 2017/5/30 0030.
  */
-
-import java.sql.*;
-import java.util.Enumeration;
-import java.util.Vector;
 
 public class ConnectionPool {
 

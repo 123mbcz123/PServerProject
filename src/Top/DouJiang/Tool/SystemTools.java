@@ -35,40 +35,45 @@ public class SystemTools {
         ConfigReader.ReadConfig();
         CreateMysqlsConnection();
         CreateRedisPool();
-        List<Plugin> pl=LoadPlugin();
+        List<Plugin> pl = LoadPlugin();
         PluginCompositor(pl);
         Enable();
         CreateServerSocket();
         long endTime = System.nanoTime(); //获取结束时间
         Print("初始化完成............启动耗时: " + (endTime - startTime) + "ns", 1, 0);
         new ConsoleThread().start();
+        new KeepThread().start();
     }
-/*
-创建ServerSocket
- */
+
+    /*
+    创建ServerSocket
+     */
     private static void CreateServerSocket() {
         ServerSockets ss = new ServerSockets();
         new Thread(ss).start();
     }
-/*
-创建Redis链接池
- */
+
+    /*
+    创建Redis链接池
+     */
     private static void CreateRedisPool() {
         RedisUtil ru = new RedisUtil("127.0.0.1", 1000);
         StaticMap.ru = ru;
     }
-/*
-关闭
- */
+
+    /*
+    关闭
+     */
     public static void Close() {
         Print("服务器开始关闭.....", 1, 0);
         CallEventClass.onDisable();
         ConfigResult.isRunning = false;
         System.exit(0);
     }
-/*
-创建Mysql链接池
- */
+
+    /*
+    创建Mysql链接池
+     */
     private static void CreateMysqlsConnection() {
         Print("开始创建Mysql链接............", 1, 0);
         ConnectionPool.PooledConnection pool = DBManager.getConnection(ConfigResult.Mysqls_host, ConfigResult.Mysqls_Port, ConfigResult.Mysqls_DB, ConfigResult.Mysqls_User, ConfigResult.Mysqls_Pass);
@@ -79,10 +84,11 @@ public class SystemTools {
         StaticMap.pool = pool;
         Print("Mysql链接创建完成............", 1, 0);
     }
-/*
-加载插件
- */
-    private static   List<Plugin>  LoadPlugin() {
+
+    /*
+    加载插件
+     */
+    private static List<Plugin> LoadPlugin() {
         List<Plugin> Plugin_List = new ArrayList<>();
         File f = new File("Plugin//");
         if (!f.exists()) {
@@ -124,11 +130,12 @@ public class SystemTools {
         StaticMap.ucl = ucl;
         return Plugin_List;
     }
-/*
-根据插件设置优先级排序
- */
+
+    /*
+    根据插件设置优先级排序
+     */
     private static void PluginCompositor(List<Plugin> Plugin_List) {
-        List<Plugin> Main_List=new ArrayList<>();
+        List<Plugin> Main_List = new ArrayList<>();
         Main_List.addAll(Plugin_List);
         Print("正在对插件[Main]进行排序............", 1, 0);
         int MaxInt = 0;
@@ -174,7 +181,7 @@ public class SystemTools {
                     MaxPlugin = pl2;
                 }
             }
-            if(MaxPlugin!=null) {
+            if (MaxPlugin != null) {
                 StaticMap.AddChatEvent(MaxPlugin);
                 Chat_List.remove(MaxPlugin);
             }
@@ -182,7 +189,7 @@ public class SystemTools {
             MaxPlugin = null;
         }
         StringBuilder sb2 = new StringBuilder();
-        if(!StaticMap.getChatEvent_List().isEmpty()) {
+        if (!StaticMap.getChatEvent_List().isEmpty()) {
             System.out.println(StaticMap.getChatEvent_List());
             System.out.println(StaticMap.getChatEvent_List().isEmpty());
             for (Plugin p3 : StaticMap.getChatEvent_List()) {
@@ -210,27 +217,28 @@ public class SystemTools {
                     MaxPlugin = pl2;
                 }
             }
-            if(MaxPlugin!=null) {
+            if (MaxPlugin != null) {
                 StaticMap.AddCommandEvent(MaxPlugin);
                 Chat_List.remove(MaxPlugin);
             }
             MaxInt = 0;
             MaxPlugin = null;
         }
-            StringBuilder sb3 = new StringBuilder();
-        if(!StaticMap.getCommandEvent_List().isEmpty()) {
+        StringBuilder sb3 = new StringBuilder();
+        if (!StaticMap.getCommandEvent_List().isEmpty()) {
             for (Plugin p3 : StaticMap.getCommandEvent_List()) {
                 sb3.append(p3.PluginName);
                 sb3.append(" > ");
             }
         }
-            Print("[Command]排序结果[从大到小]: " + sb3.toString(), 1, 0);
+        Print("[Command]排序结果[从大到小]: " + sb3.toString(), 1, 0);
 
         Print("对插件排序进行完成............", 1, 0);
     }
-/*
-启动完成时执行插件的onEnable方法
- */
+
+    /*
+    启动完成时执行插件的onEnable方法
+     */
     private static void Enable() {
         List<Plugin> Plugin_List = StaticMap.getMainClass_List();
         CallEventClass cec = new CallEventClass();
@@ -241,9 +249,10 @@ public class SystemTools {
     /**
      * 打印输出Log
      * 待保存
+     *
      * @param str 信息
-     * @param i 1信息 2 警告
-     * @param l 权重 1位可忽略 2为重要
+     * @param i   1信息 2 警告
+     * @param l   权重 1位可忽略 2为重要
      */
     public static void Print(String str, int i, int l) {
         if (l <= ConfigResult.PrintLevel) {

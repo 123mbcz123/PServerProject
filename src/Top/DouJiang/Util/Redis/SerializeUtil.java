@@ -16,6 +16,7 @@ public class SerializeUtil {
 
     /**
      * serialize Object
+     *
      * @param object
      * @return byte[]
      */
@@ -35,6 +36,7 @@ public class SerializeUtil {
 
     /**
      * unserialize byte[]
+     *
      * @param bytes
      * @return Object
      */
@@ -52,6 +54,7 @@ public class SerializeUtil {
 
     /**
      * serialize hash Map<Object, Object>
+     *
      * @param hash
      * @return Map<byte[], byte[]>
      */
@@ -71,6 +74,7 @@ public class SerializeUtil {
 
     /**
      * unserialize hash Map<byte[], byte[]>
+     *
      * @param hash
      * @return Map<Object, Object>
      */
@@ -90,6 +94,7 @@ public class SerializeUtil {
 
     /**
      * serialize hash Map<String, Object>
+     *
      * @param hash
      * @return Map<byte[], byte[]>
      */
@@ -109,6 +114,7 @@ public class SerializeUtil {
 
     /**
      * unserialize hash Map<byte[], byte[]>
+     *
      * @param hash
      * @return Map<String, Object>
      */
