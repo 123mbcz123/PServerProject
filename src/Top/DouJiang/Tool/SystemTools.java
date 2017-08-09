@@ -134,6 +134,129 @@ public class SystemTools {
     /*
     根据插件设置优先级排序
      */
+    /*/
+    排序顺序:
+    0 主类
+    1 聊天
+    2 指令
+    3 登入
+    4 加入
+    5 离开
+     */
+    private static void  PluginCompositor(List<Plugin> Plugin_List){
+        for(int i=0;i<6;i++){
+            List<Plugin> Task_List = new ArrayList<>();
+            Task_List.addAll(Plugin_List);
+            //Print("正在对插件[Main]进行排序............", 1, 0);
+            int MaxInt = 0;
+            Plugin MaxPlugin = null;
+            List<Plugin> Remove_List = new ArrayList<>();
+            for (Plugin pl3 : Task_List) {
+                switch (i) {
+                    case 0:
+                    if (pl3.MainClass == null) {
+                        Remove_List.add(pl3);
+                    }
+                    break;
+                    case 1:
+                        if(pl3.ChatClass==null){
+                            Remove_List.add(pl3);
+                        }
+                        break;
+                    case 2:
+                        if(pl3.CommandClass==null){
+                            Remove_List.add(pl3);
+                        }
+                        break;
+                    case 3:
+                        if(pl3.AuthClass==null){
+                            Remove_List.add(pl3);
+                        }
+                        break;
+                    case 4:
+                        if(pl3.JoinClass==null){
+                            Remove_List.add(pl3);
+                        }
+                        break;
+                    case 5:
+                        if(pl3.LeaveClass==null){
+                            Remove_List.add(pl3);
+                        }
+                        break;
+                }
+            }
+            Task_List.removeAll(Remove_List);
+            int i2 = Task_List.size();
+            for (int m = 0; m < i2; m++) {
+                for (int n = 0; n <  Task_List.size(); n++) {
+                    Plugin pl2 = Task_List.get(n);
+                    int num = 0;
+                    switch (i){
+                        case 0:
+                            num=pl2.Main_Weight;
+                            break;
+                        case 1:
+                            num=pl2.Chat_Weight;
+                            break;
+                        case 2:
+                            num=pl2.Command_Weight;
+                            break;
+                        case 3:
+                            num=pl2.Auth_Weight;
+                            break;
+                        case 4:
+                            num=pl2.Join_Weight;
+                            break;
+                        case 5:
+                            num=pl2.Leave_Weight;
+                            break;
+                    }
+                    if (num >= MaxInt) {
+                        MaxInt = num;
+                        MaxPlugin = pl2;
+                    }
+                }
+                if (MaxPlugin != null) {
+                    switch (i){
+                        case 0:
+                            StaticMap.AddMainClass(MaxPlugin);
+                            break;
+                        case 1:
+                            StaticMap.AddChatEvent(MaxPlugin);
+                            break;
+                        case 2:
+                            StaticMap.AddCommandEvent(MaxPlugin);
+                            break;
+                        case 3:
+                            StaticMap.AddAuthEvent(MaxPlugin);
+                            break;
+                        case 4:
+                            StaticMap.AddJoinEvent(MaxPlugin);
+                            break;
+                        case 5:
+                            StaticMap.AddLeaveEvent(MaxPlugin);
+                            break;
+                    }
+                    Task_List.remove(MaxPlugin);
+                }
+                MaxInt = 0;
+                MaxPlugin = null;
+            }
+            /*
+            StringBuilder sb = new StringBuilder();
+            if (!Task_List.isEmpty()) {
+                for (Plugin p3 : StaticMap.getChatEvent_List()) {
+                    sb.append(p3.PluginName);
+                    sb.append(" > ");
+                }
+            }
+            Print("[Chat]排序结果[从大到小]: " + sb.toString(), 1, 0);
+            */
+
+        }
+
+    }
+    /*
     private static void PluginCompositor(List<Plugin> Plugin_List) {
         List<Plugin> Main_List = new ArrayList<>();
         Main_List.addAll(Plugin_List);
@@ -235,7 +358,7 @@ public class SystemTools {
 
         Print("对插件排序进行完成............", 1, 0);
     }
-
+    */
     /*
     启动完成时执行插件的onEnable方法
      */

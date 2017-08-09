@@ -25,7 +25,21 @@ public class StaticMap {
     private static List<Plugin> MainClass_List = new ArrayList<>();
     private static List<Plugin> ChatEvent_List = new ArrayList<>();
     private static List<Plugin> CommandEvent_List = new ArrayList<>();
+    private static List<Plugin> AuthEvent_List = new ArrayList<>();
+    private static List<Plugin> JoinEvent_List = new ArrayList<>();
+    private static List<Plugin> LeaveEvent_List = new ArrayList<>();
 
+    public static List<Plugin> getAuthEvent_List() {
+        return AuthEvent_List;
+    }
+
+    public static List<Plugin> getJoinEvent_List() {
+        return JoinEvent_List;
+    }
+
+    public static List<Plugin> getLeaveEvent_List() {
+        return LeaveEvent_List;
+    }
     public static List<Plugin> getMainClass_List() {
         return MainClass_List;
     }
@@ -48,5 +62,16 @@ public class StaticMap {
 
     public static void AddCommandEvent(Plugin pl) {
         CommandEvent_List.add(pl);
+    }
+    public static void AddAuthEvent(Plugin pl) {
+        AuthEvent_List.add(pl);
+    }
+
+    public static void AddJoinEvent(Plugin pl) {
+        JoinEvent_List.add(pl);
+    }
+
+    public static void AddLeaveEvent(Plugin pl) {
+        LeaveEvent_List.add(pl);
     }
 }
