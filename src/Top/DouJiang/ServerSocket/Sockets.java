@@ -6,10 +6,7 @@ import Top.DouJiang.Static.StaticMap;
 import Top.DouJiang.Tool.SocketTools;
 import Top.DouJiang.Tool.SystemTools;
 import Top.DouJiang.Tool.ZipUtils;
-import Top.DouJiang.plugin.ChatEvents;
-import Top.DouJiang.plugin.CommandClass;
-import Top.DouJiang.plugin.CommandEvents;
-import Top.DouJiang.plugin.TaskClass;
+import Top.DouJiang.plugin.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -81,6 +78,7 @@ public class Sockets implements Runnable {
     public void run() {
         try {
             SystemTools.Print("客户IP:" + s.getInetAddress().getHostAddress() + "加入惹连接!", 1, 1);
+            StaticMap.Sockets_Set.add(this);
             dis = new DataInputStream(s.getInputStream());
             dos = new DataOutputStream(s.getOutputStream());
             while (ConfigResult.isRunning) { //连续获取数据
@@ -108,6 +106,13 @@ public class Sockets implements Runnable {
                     /*
                     对指令进行处理
                      */
+                    if(!Cmd.equalsIgnoreCase("Auth")&&!isAuth){
+                        Map<String,String> NotLoginMap=new HashMap<>();
+                        NotLoginMap.put("Cmd","Return");
+                        NotLoginMap.put("TypeId","Auth_004");
+                        Send(NotLoginMap);
+                        continue;
+                    }
                     if(Cmd.equalsIgnoreCase("Chat")) {
                         ChatEvent(MsgMap);
                         continue;
@@ -123,14 +128,6 @@ public class Sockets implements Runnable {
         Close();
     }
     private void ChatEvent(Map<String,String> MsgMap){
-        if (!isAuth) {
-            //SystemTools.Print("IP: " + s.getInetAddress().getHostAddress() + " Id: " + Id + " 尝试不登入发送信息!", 2, 1);
-            Map<String,String> NotLoginMap=new HashMap<>();
-            NotLoginMap.put("Cmd","Return");
-            NotLoginMap.put("TypeId","Auth_004");
-            Send(NotLoginMap);
-            return;
-        }
         String ToId = MsgMap.get("ToId");
         String SendMsg = SocketTools.Base64Decrypt(MsgMap.get("Msg"));
         int Type = -1;
@@ -150,6 +147,7 @@ public class Sockets implements Runnable {
 
     }
     public void Send(String str) {
+        System.out.println("发送数据:"+str);
         try {
             /*
             压缩实现

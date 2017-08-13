@@ -1,5 +1,6 @@
 package Top.DouJiang.Main;
 
+import Top.DouJiang.Command.ConsoleCommand;
 import Top.DouJiang.Config.ConfigResult;
 import Top.DouJiang.Tool.SystemTools;
 
@@ -20,11 +21,14 @@ public class ConsoleThread extends Thread {
                 continue;
             }
             String[] strs = str.split("\\ ");
-            if (strs == null) {
+            if (strs.length== 0) {
                 SystemTools.Print("错误的指令输入help查看全部指令!", 2, 0);
                 continue;
             }
+            ConsoleCommand cc=new ConsoleCommand(strs,1);
+            cc.CallConsoleCommand();
 
+            cc=null;
         }
     }
 }

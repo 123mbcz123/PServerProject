@@ -1,6 +1,8 @@
 package Top.DouJiang.Test;
 
+import Top.DouJiang.Config.ConfigResult;
 import Top.DouJiang.Tool.SocketTools;
+import Top.DouJiang.Tool.ZipUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,28 +17,43 @@ import java.util.Map;
 public class TestSocket extends Thread {
     private String user = null;
     private String pass = null;
-
+    private DataOutputStream dos = null;
     public TestSocket(String user, String pass) {
         this.user = user;
         this.pass = pass;
     }
 
     public void run() {
-        DataOutputStream dos = null;
         TestThread.all++;
         try {
-            Socket s = new Socket("192.168.8.130", 2333);
+            Socket s = new Socket("127.0.0.1", 2333);
             //s.setKeepAlive(true);
             dos = new DataOutputStream(s.getOutputStream());
-            //new RecvThread(s).start();
+            new RecvThread(s).start();
             Map<String, String> CmdMap = new HashMap<>();
             CmdMap.put("Cmd", "Auth");
             CmdMap.put("User", user);
             CmdMap.put("Pass", SocketTools.Base64Encryption(pass));
-            dos.writeUTF("[" + SocketTools.MapToJson(CmdMap) + "]");
+            String Send="[" + SocketTools.MapToJson(CmdMap) + "]";
+            dos.writeUTF(Send);
+            System.out.println("发送数据: "+Send);
             dos.flush();
         } catch (IOException e) {
-            TestThread.fail++;
+        }
+    }
+    public void Send(Map<String, String> map) {
+        Send(SocketTools.MapToJson(map));
+
+    }
+    public void Send(String str) {
+        System.out.println("发送数据:"+str);
+        try {
+            /*
+            压缩实现
+             */
+                dos.writeUTF("["+str+"]");
+                dos.flush();
+        } catch (IOException e) {
         }
     }
 
@@ -52,7 +69,7 @@ public class TestSocket extends Thread {
             try {
                 dis = new DataInputStream(s1.getInputStream());
                 while (true) {
-                    dis.readUTF();
+                    System.out.println("接受数据: "+dis.readUTF());
                 }
             } catch (IOException e) {
                 //

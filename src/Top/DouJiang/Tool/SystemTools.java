@@ -57,7 +57,7 @@ public class SystemTools {
     创建Redis链接池
      */
     private static void CreateRedisPool() {
-        RedisUtil ru = new RedisUtil("127.0.0.1", 1000);
+        RedisUtil ru = new RedisUtil(ConfigResult.RedisHost, ConfigResult.RedisPort);
         StaticMap.ru = ru;
     }
 
@@ -143,7 +143,18 @@ public class SystemTools {
     4 加入
     5 离开
      */
-    private static void  PluginCompositor(List<Plugin> Plugin_List){
+    public static void  PluginCompositor(List<Plugin> Plugin_List){
+        List<Plugin> Cmd_List=new ArrayList<>();
+        Cmd_List.addAll(Plugin_List);
+        List<Plugin> Cmd_Remove=new ArrayList<>();
+        for(int ic=0;ic<Cmd_List.size();ic++){
+            if(Cmd_List.get(ic).ConsoleCommandClass==null){
+                Cmd_Remove.add(Cmd_List.get(ic));
+            }
+        }
+        Cmd_List.removeAll(Cmd_Remove);
+        Cmd_Remove=null;
+        StaticMap.setConsoleCommandEvent_List(Cmd_List);
         for(int i=0;i<6;i++){
             List<Plugin> Task_List = new ArrayList<>();
             Task_List.addAll(Plugin_List);
@@ -217,6 +228,7 @@ public class SystemTools {
                     }
                 }
                 if (MaxPlugin != null) {
+                    //System.out.println("添加: "+MaxPlugin.PluginName);
                     switch (i){
                         case 0:
                             StaticMap.AddMainClass(MaxPlugin);
@@ -242,123 +254,10 @@ public class SystemTools {
                 MaxInt = 0;
                 MaxPlugin = null;
             }
-            /*
-            StringBuilder sb = new StringBuilder();
-            if (!Task_List.isEmpty()) {
-                for (Plugin p3 : StaticMap.getChatEvent_List()) {
-                    sb.append(p3.PluginName);
-                    sb.append(" > ");
-                }
-            }
-            Print("[Chat]排序结果[从大到小]: " + sb.toString(), 1, 0);
-            */
 
         }
-
+        //System.out.println("Chat="+StaticMap.getChatEvent_List().get(0).PluginName);
     }
-    /*
-    private static void PluginCompositor(List<Plugin> Plugin_List) {
-        List<Plugin> Main_List = new ArrayList<>();
-        Main_List.addAll(Plugin_List);
-        Print("正在对插件[Main]进行排序............", 1, 0);
-        int MaxInt = 0;
-        Plugin MaxPlugin = null;
-        int i4 = Main_List.size();
-        for (int m = 0; m < i4; m++) {
-            for (int n = 0; n < Main_List.size(); n++) {
-                Plugin pl2 = Main_List.get(n);
-                int num = pl2.Main_Weight;
-                if (num >= MaxInt) {
-                    MaxInt = num;
-                    MaxPlugin = pl2;
-                }
-            }
-            StaticMap.AddMainClass(MaxPlugin);
-            Main_List.remove(MaxPlugin);
-            MaxInt = 0;
-            MaxPlugin = null;
-        }
-        StringBuilder sb1 = new StringBuilder();
-        for (Plugin p3 : StaticMap.getMainClass_List()) {
-            sb1.append(p3.PluginName);
-            sb1.append(" > ");
-        }
-        Print("[Main]排序结果[从大到小]: " + sb1.toString(), 1, 0);
-        Print("正在对插件[Chat]进行排序............", 1, 0);
-        List<Plugin> Chat_List = new ArrayList<>();
-        List<Plugin> Remove_List = new ArrayList<>();
-        Chat_List.addAll(Plugin_List);
-        for (Plugin pl3 : Chat_List) {
-            if (pl3.ChatClass == null) {
-                Remove_List.add(pl3);
-            }
-        }
-        Chat_List.removeAll(Remove_List);
-        Remove_List.clear();
-        for (int m = 0; m < i4; m++) {
-            for (int n = 0; n < Chat_List.size(); n++) {
-                Plugin pl2 = Chat_List.get(n);
-                int num = pl2.Chat_Weight;
-                if (num >= MaxInt) {
-                    MaxInt = num;
-                    MaxPlugin = pl2;
-                }
-            }
-            if (MaxPlugin != null) {
-                StaticMap.AddChatEvent(MaxPlugin);
-                Chat_List.remove(MaxPlugin);
-            }
-            MaxInt = 0;
-            MaxPlugin = null;
-        }
-        StringBuilder sb2 = new StringBuilder();
-        if (!StaticMap.getChatEvent_List().isEmpty()) {
-            System.out.println(StaticMap.getChatEvent_List());
-            System.out.println(StaticMap.getChatEvent_List().isEmpty());
-            for (Plugin p3 : StaticMap.getChatEvent_List()) {
-                sb2.append(p3.PluginName);
-                sb2.append(" > ");
-            }
-        }
-        Print("[Chat]排序结果[从大到小]: " + sb2.toString(), 1, 0);
-        Print("正在对插件[Command]进行排序............", 1, 0);
-        List<Plugin> Command_List = new ArrayList<>();
-        Chat_List.addAll(Plugin_List);
-        for (Plugin pl3 : Command_List) {
-            if (pl3.CommandClass == null) {
-                Remove_List.add(pl3);
-            }
-        }
-        Command_List.removeAll(Remove_List);
-        Remove_List.clear();
-        for (int m = 0; m < i4; m++) {
-            for (int n = 0; n < Command_List.size(); n++) {
-                Plugin pl2 = Command_List.get(n);
-                int num = pl2.Command_Weight;
-                if (num >= MaxInt) {
-                    MaxInt = num;
-                    MaxPlugin = pl2;
-                }
-            }
-            if (MaxPlugin != null) {
-                StaticMap.AddCommandEvent(MaxPlugin);
-                Chat_List.remove(MaxPlugin);
-            }
-            MaxInt = 0;
-            MaxPlugin = null;
-        }
-        StringBuilder sb3 = new StringBuilder();
-        if (!StaticMap.getCommandEvent_List().isEmpty()) {
-            for (Plugin p3 : StaticMap.getCommandEvent_List()) {
-                sb3.append(p3.PluginName);
-                sb3.append(" > ");
-            }
-        }
-        Print("[Command]排序结果[从大到小]: " + sb3.toString(), 1, 0);
-
-        Print("对插件排序进行完成............", 1, 0);
-    }
-    */
     /*
     启动完成时执行插件的onEnable方法
      */

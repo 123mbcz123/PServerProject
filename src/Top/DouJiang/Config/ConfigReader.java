@@ -25,6 +25,8 @@ public class ConfigReader {
             c.Mysqls_User = "root";
             c.ServerPort = 2333;
             c.Mysqls_Port = 3306;
+            c.Redis_Host="127.0.0.1";
+            c.Redis_Port=1000;
             try {
                 Yaml.dump(c, f);
                 SystemTools.Print("首次初始化,请设置配置文件,服务器关闭中...", 1, 0);
@@ -43,7 +45,6 @@ public class ConfigReader {
             }
             ConfigResult.Mysqls_host = c.Mysqls_host;
             ConfigResult.Mysqls_Port = c.Mysqls_Port;
-            ;
             ConfigResult.Mysqls_DB = c.Mysqls_DB;
             ConfigResult.Mysqls_User = c.Mysqls_User;
             ConfigResult.Mysqls_Pass = c.Mysqls_Pass;
@@ -51,6 +52,8 @@ public class ConfigReader {
             ConfigResult.isUseZip = c.isUseZip;
             ConfigResult.ServerPort = c.ServerPort;
             ConfigResult.PrintLevel = c.PrintLevel;
+            ConfigResult.RedisHost=c.Redis_Host;
+            ConfigResult.RedisPort=c.Redis_Port;
         } catch (FileNotFoundException e) {
             SystemTools.Print("Config.yml不存在,服务器关闭!", 2, 0);
             SystemTools.Close();

@@ -1,0 +1,105 @@
+package Top.DouJiang.Rcon;
+
+import Top.DouJiang.Config.Config;
+import Top.DouJiang.Config.ConfigResult;
+import Top.DouJiang.Tool.SocketTools;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by NicoNicoNi on 2017/8/12 0012.
+ */
+public class RconSockets implements Runnable {
+    private Socket s=null;
+    private DataOutputStream dos=null;
+    private DataInputStream dis=null;
+    private boolean isAuth=false;
+    @Override
+    public void run() {
+        if(ConfigResult.isUseIpWhiteList){
+            /*
+            白名单验证模块
+             */
+            String host=s.getInetAddress().getHostAddress();
+            boolean isHave=false;
+            for(String s:ConfigResult.WhiteList){
+                if(s.equalsIgnoreCase(host)){
+                    isHave=true;
+                    break;
+                }
+            }
+            if(!isHave){
+                return;
+            }
+        }
+        try {
+            dos=new DataOutputStream(s.getOutputStream());
+            dis=new DataInputStream(s.getInputStream());
+            while(ConfigResult.isRunning){
+                List<String> strs= SocketTools.TurnToList(dis.readUTF());
+                for(String s:strs){
+                    Map<String,String> CmdMap=SocketTools.JsonToMap(s);
+                    if(CmdMap==null){
+                        continue;
+                    }
+                    String Cmd=CmdMap.get("Cmd");
+                    if(Cmd==null){
+                        continue;
+                    }
+                    if(!Cmd.equalsIgnoreCase("Auth")){
+                        if(!isAuth){
+                            Map<String ,String> NotLoginMap=new HashMap<>();
+                            NotLoginMap.put("Cmd","Auth");
+                            NotLoginMap.put("TypeId","0x004");
+                            Send(NotLoginMap);
+                            continue;
+                        }
+                        continue;
+                    }
+                    isAuth=isSuccessfulAuth(CmdMap);
+                    if(isAuth){
+                        Map<String ,String> SuccessfulLoginMap=new HashMap<>();
+                        SuccessfulLoginMap.put("Cmd","Auth");
+                        SuccessfulLoginMap.put("TypeId","0x002");
+                        Send(SuccessfulLoginMap);
+                    }else {
+                        Map<String ,String> failLoginMap=new HashMap<>();
+                        failLoginMap.put("Cmd","Auth");
+                        failLoginMap.put("TypeId","0x001");
+                        Send(failLoginMap);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+
+    }
+    public boolean isSuccessfulAuth(Map<String,String> CmdMap){
+        String Key=CmdMap.get("Key");
+        if(Key==null){
+            return false;
+        }
+        if(ConfigResult.RconKey.equalsIgnoreCase(Key)){
+            return true;
+        }
+        return false;
+    }
+    public RconSockets(Socket s){
+        this.s=s;
+    }
+    public void Send(Map<String,String> CmdMap){
+        try {
+            dos.writeUTF("["+SocketTools.MapToJson(CmdMap)+"]");
+            dos.flush();
+        } catch (IOException e) {
+            //
+        }
+    }
+}

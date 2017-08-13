@@ -8,7 +8,6 @@ import Top.DouJiang.Config.ConfigResult;
 public class KeepThread extends Thread {
     public void run() {
         while (ConfigResult.isRunning) {
-
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

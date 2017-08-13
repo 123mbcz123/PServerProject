@@ -48,4 +48,12 @@ public class Config {
     Mysql 服务器密码
      */
     public String Mysqls_Pass = null;
+    /*
+    Redis ip
+     */
+    public String Redis_Host=null;
+    /*
+    Redis 端口
+     */
+    public int Redis_Port=-1;
 }

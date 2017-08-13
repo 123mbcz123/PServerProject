@@ -20,4 +20,5 @@ public class Plugin implements Serializable {
     public String JoinClass=null;//加入事件的权重
     public int Leave_Weight=0;//退出事件的权重
     public String LeaveClass=null;//退出事件的权重
+    public String ConsoleCommandClass=null;
 }

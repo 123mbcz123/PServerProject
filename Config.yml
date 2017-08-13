@@ -1,10 +1,23 @@
 --- !Top.DouJiang.Config.Config
 Mysqls_DB: test4
+#数据名
 Mysqls_Pass: diantong
+#数据库密码
 Mysqls_Port: 3306
+#数据库端口
 Mysqls_User: root
+#数据库账号
 Mysqls_host: 127.0.0.1
-PrintLevel: 0
+#数据库IP
+PrintLevel: 1
+#打印等级 1详细 0省略 推荐0
 ServerPort: 2333
-TrueUseZipOrFalseUseGzip: true
+#服务器端口
 isUseZip: false
+#是否启用压缩 若为false 下一项无效 为true需要对客户端也使用相同的压缩才行
+TrueUseZipOrFalseUseGzip: true
+#为true使用Zip false使用Gzip 推荐Zip 效率较高
+Redis_Host: 127.0.0.1
+#Redis服务器Ip
+Redis_Port: 1000
+#Redis服务器端口

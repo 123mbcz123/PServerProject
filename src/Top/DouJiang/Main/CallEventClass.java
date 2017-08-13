@@ -1,5 +1,8 @@
 package Top.DouJiang.Main;
 
+import Top.DouJiang.Command.ConsoleCommandClass;
+import Top.DouJiang.Command.ConsoleCommandEvents;
+import Top.DouJiang.Command.ConsoleCommandResult;
 import Top.DouJiang.Static.StaticMap;
 import Top.DouJiang.plugin.*;
 
@@ -29,9 +32,6 @@ public class CallEventClass {
                     Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X007", 2, 0);
                     continue;
                 }
-                if (!(obj instanceof PluginMain)) {
-                    Print("插件异常[" + pl.PluginName + "]...引用接口错误...错误代码0X011", 2, 0);
-                }
                 PluginMain pm = (PluginMain) obj;
                 pm.onEnable();
                 Print("执行" + pl.PluginName + "插件完成!", 1, 1);
@@ -45,7 +45,6 @@ public class CallEventClass {
         }
         Print("onEnable方法执行完毕.......", 1, 1);
     }
-
     /*
     执行关闭
      */
@@ -63,9 +62,6 @@ public class CallEventClass {
                     Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X007", 2, 0);
                     continue;
                 }
-                if (!(obj instanceof PluginMain)) {
-                    Print("插件异常[" + pl.PluginName + "]...引用接口错误...错误代码0X011", 2, 0);
-                }
                 PluginMain pm = (PluginMain) obj;
                 pm.onDisable();
                 Print("执行" + pl.PluginName + "插件完成!", 1, 1);
@@ -79,12 +75,11 @@ public class CallEventClass {
         }
         Print("onDisable方法执行完毕.......", 1, 1);
     }
-
     /*
     执行指令
      */
     public void CallCommandRunner(CommandClass cc) {
-        List<Plugin> Plugin_List = StaticMap.getMainClass_List();
+        List<Plugin> Plugin_List = StaticMap.getCommandEvent_List();
         URLClassLoader ucl = StaticMap.ucl;
         Print("开始下发任务.......", 1, 1);
         for (Plugin pl : Plugin_List) {
@@ -96,9 +91,6 @@ public class CallEventClass {
                 if (obj == null) {
                     Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X007", 2, 0);
                     continue;
-                }
-                if (!(obj instanceof PluginMain)) {
-                    Print("插件异常[" + pl.PluginName + "]...引用接口错误...错误代码0X011", 2, 0);
                 }
                 CommandEvents ce = (CommandEvents) obj;
                 CommandResult cr = ce.CommandEvent(cc);
@@ -120,7 +112,6 @@ public class CallEventClass {
         }
         Print("任务下发执行完毕.......", 1, 1);
     }
-
     /*
     执行聊天
      */
@@ -131,15 +122,12 @@ public class CallEventClass {
         for (Plugin pl : Plugin_List) {
             try {
                 Print("开始执行" + pl.PluginName + "插件", 1, 1);
-                Class<?> c = ucl.loadClass(pl.MainClass);
+                Class<?> c = ucl.loadClass(pl.ChatClass);
                 Object obj = c.newInstance();
                 // System.out.println("UCL="+ucl+" Obj="+obj);
                 if (obj == null) {
                     Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X007", 2, 0);
                     continue;
-                }
-                if (!(obj instanceof PluginMain)) {
-                    Print("插件异常[" + pl.PluginName + "]...引用接口错误...错误代码0X011", 2, 0);
                 }
                 ChatEvents ce = (ChatEvents) obj;
                 TaskResult tr = ce.ChatEvent(tc);
@@ -210,9 +198,6 @@ public class CallEventClass {
                     Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X007", 2, 0);
                     continue;
                 }
-                if (!(obj instanceof LeaveEvents)) {
-                    Print("插件异常[" + pl.PluginName + "]...引用接口错误...错误代码0X011", 2, 0);
-                }
                 LeaveEvents le=(LeaveEvents) obj;
                 LeaveEventResult ler=le.PlayerLeaveEvent(lc);
                 if (ler != null && ler.isCancel()) {
@@ -230,7 +215,7 @@ public class CallEventClass {
         Print("任务下发执行完毕.......", 1, 1);
     }
     /*
-    执行注册
+    执行登入
      */
     public void CallAuthEvent(AuthClass ac){
         List<Plugin> Plugin_List = StaticMap.getAuthEvent_List();
@@ -265,4 +250,39 @@ public class CallEventClass {
         }
         Print("任务下发执行完毕.......", 1, 1);
     }
+    /*
+    执行注册
+     */
+
+    /*
+    执行控制台&Rcon指令
+     */
+    public ConsoleCommandResult  CallConsoleCommandEvent(ConsoleCommandClass ccc){
+        List<Plugin> Plugin_List = StaticMap.getCommandEvent_List();
+        URLClassLoader ucl = StaticMap.ucl;
+        Print("开始下发任务.......", 1, 1);
+        for (Plugin pl : Plugin_List) {
+            try {
+                Print("开始执行" + pl.PluginName + "插件", 1, 1);
+                Class<?> c = ucl.loadClass(pl.ConsoleCommandClass);
+                Object obj = c.newInstance();
+                // System.out.println("UCL="+ucl+" Obj="+obj);
+                ConsoleCommandEvents cce=(ConsoleCommandEvents)obj;
+                ConsoleCommandResult ccr=cce.ConsoleCommandEvent(ccc);
+                if(ccr.isFinish()){
+                    return ccr;
+                }
+                Print("执行" + pl.PluginName + "插件完成!", 1, 1);
+            } catch (ClassNotFoundException e) {
+                Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X004", 2, 0);
+            } catch (IllegalAccessException e) {
+                Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X005", 2, 0);
+            } catch (InstantiationException e) {
+                Print("插件异常[" + pl.PluginName + "]...执行类错误...错误代码0X006", 2, 0);
+            }
+        }
+        Print("任务下发执行完毕.......", 1, 1);
+        return null;
+    }
+
 }
