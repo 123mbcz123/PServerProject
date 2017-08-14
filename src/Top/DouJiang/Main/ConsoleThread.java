@@ -27,7 +27,6 @@ public class ConsoleThread extends Thread {
             }
             ConsoleCommand cc=new ConsoleCommand(strs,1);
             cc.CallConsoleCommand();
-
             cc=null;
         }
     }

@@ -15,29 +15,14 @@ import java.util.Map;
  * Created by NicoNicoNi on 2017/8/4 0004.
  */
 public class TestSocket extends Thread {
-    private String user = null;
-    private String pass = null;
     private DataOutputStream dos = null;
-    public TestSocket(String user, String pass) {
-        this.user = user;
-        this.pass = pass;
-    }
-
     public void run() {
-        TestThread.all++;
         try {
-            Socket s = new Socket("127.0.0.1", 2333);
+            Socket s = new Socket("127.0.0.1", 6666);
             //s.setKeepAlive(true);
             dos = new DataOutputStream(s.getOutputStream());
             new RecvThread(s).start();
-            Map<String, String> CmdMap = new HashMap<>();
-            CmdMap.put("Cmd", "Auth");
-            CmdMap.put("User", user);
-            CmdMap.put("Pass", SocketTools.Base64Encryption(pass));
-            String Send="[" + SocketTools.MapToJson(CmdMap) + "]";
-            dos.writeUTF(Send);
-            System.out.println("发送数据: "+Send);
-            dos.flush();
+            Send("Login 123456789");
         } catch (IOException e) {
         }
     }

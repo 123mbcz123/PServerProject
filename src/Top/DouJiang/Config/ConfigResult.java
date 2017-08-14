@@ -19,9 +19,9 @@ public class ConfigResult {
     public static boolean isUseZip = false;
     public static int RedisPort=-1;
     public static String RedisHost=null;
-    public static String RconKey=null;
+    public static String RconKey="123456789";
     public static String RconHost=null;
-    public static int RconPort=-1;
+    public static int RconPort=6666;
     public static boolean isUseIpWhiteList=false;
     public static List<String> WhiteList=new ArrayList<>();
     /*
